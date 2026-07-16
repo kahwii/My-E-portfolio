@@ -60,7 +60,7 @@ function initReveal() {
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        const delay = entry.target.getAttribute('data-delay') || 0;
+        const delay = entry.target.getAttribute('data-delay') || '0';
         setTimeout(() => {
           entry.target.classList.add('active');
         }, parseInt(delay));
@@ -78,7 +78,7 @@ function initSkillBars() {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
         const progress = entry.target.getAttribute('data-progress');
-        entry.target.style.width = `${progress}%`;
+        (entry.target as HTMLElement).style.width = `${progress}%`;
       }
     });
   }, { threshold: 0.5 });
@@ -115,6 +115,7 @@ function initSmoothScroll() {
 function initTypeEffect() {
   const subtitle = document.querySelector('.hero-subtitle');
   if (!subtitle) return;
+  const subtitleEl: Element = subtitle;
 
   const roles = ['Frontend Developer', 'UI/UX Enthusiast', 'Problem Solver', 'Creative Coder'];
   let roleIndex = 0;
@@ -125,10 +126,10 @@ function initTypeEffect() {
     const currentRole = roles[roleIndex];
 
     if (isDeleting) {
-      subtitle.textContent = currentRole.substring(0, charIndex - 1);
+      subtitleEl.textContent = currentRole.substring(0, charIndex - 1);
       charIndex--;
     } else {
-      subtitle.textContent = currentRole.substring(0, charIndex + 1);
+      subtitleEl.textContent = currentRole.substring(0, charIndex + 1);
       charIndex++;
     }
 
@@ -220,10 +221,11 @@ function initTiltCards() {
 
   cards.forEach(card => {
     card.addEventListener('mousemove', (e) => {
+      const ev = e as MouseEvent;
       const el = card as HTMLElement;
       const rect = el.getBoundingClientRect();
-      const x = e.clientX - rect.left;
-      const y = e.clientY - rect.top;
+      const x = ev.clientX - rect.left;
+      const y = ev.clientY - rect.top;
       const centerX = rect.width / 2;
       const centerY = rect.height / 2;
       const rotateX = (y - centerY) / 12;

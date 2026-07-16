@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import { resolve } from 'path'
 
 export default defineConfig({
-  base: '/my-e-portfolio/',
+  base: process.env.GITHUB_ACTIONS ? '/My-E-portfolio/' : '/',
   build: {
     outDir: 'dist',
     rollupOptions: {
