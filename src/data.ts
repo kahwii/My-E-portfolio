@@ -41,6 +41,8 @@ export const activities: Activity[] = [
       '/assets/Sagarino_Exercise_PT-P1.pdf',
       '/assets/Sagarino_Exercise_PT-P1.xlsx',
     ],
+    reflection:
+      'Honestly, before this exercise I thought you had to program every rule for the computer to understand text, like telling it "if the message says refund, it\'s a complaint." But building the model showed me it doesn\'t work that way. The neural network just learned from the examples I gave it and was able to classify new messages I never trained it on. That part was actually cool to see.\nWhat stuck with me the most was how much the data mattered. When I only had a few examples and they overlapped, the model gave a weak 44% guess. After I added more examples and made them clearer, the same type of phrase went up to over 90%. It made me realize the model is only as good as the data you feed it. The tricky part was testing the sarcastic and random questions — the sarcastic ones still got classified right but with lower confidence, and the billing questions dropped to like 4-5% because I never gave it a class for those. It made sense once I thought about it.\nOverall I learned a lot about how these models actually learn and why data quality is such a big deal. If I did it again I\'d probably add more classes and some sarcastic examples from the start so it could handle the harder cases better.',
   },
 ];
 
