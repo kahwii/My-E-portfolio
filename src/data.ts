@@ -7,10 +7,27 @@ export interface Activity {
   status: 'submitted' | 'pending' | 'draft';
   files?: string[];
   notes?: string;
+  reflection?: string;
   period: 'prelim' | 'midterm' | 'finals';
 }
 
 export const activities: Activity[] = [
+  {
+    id: 1,
+    title: 'WW-P2: Introduction to NLP Concepts',
+    type: 'activity',
+    description:
+      'Guided module on foundational Natural Language Processing — tokenization, TF-IDF statistical weighting, and semantic embeddings. The hands-on portion used two browser-based apps running Microsoft Phi-3.5-mini locally via WebGPU: a Chat Playground for abstractive summarization and a Language Playground for language detection and PII extraction.',
+    date: '2025-07-23',
+    status: 'submitted',
+    period: 'prelim',
+    files: [
+      '/assets/Sagarino-NLP_Exercise.pdf',
+      '/assets/Emmanuel_Sagarino_NLP_IEEE_Reflection.docx',
+    ],
+    reflection:
+      'Coming into this exercise, my understanding of text handling was purely operational — strip punctuation, lowercase, vectorize, then hand it to a classifier. This activity turned that procedure into actual reasoning about *why* each step exists and what it costs. Three ideas stuck with me. First, preprocessing is never neutral: aggressive lowercasing would have erased the German capitalization that the language detector relied on, and removing stop-words would kill the negation in "not good" that carries the entire sentiment. Every cleaning decision is a trade-off tied to the task. Second, TF-IDF and embeddings are complementary, not competing — TF-IDF is transparent and auditable but treats "laptop" and "notebook computer" as unrelated, while embeddings place similar meanings near each other as measurable geometry. Third, and most eye-opening, was the limitation of static embeddings: one fixed vector per word collapses the "bank" of a river and the "bank" that holds money into a single averaged point. Contextual models fix this by computing a fresh vector for every occurrence based on its surrounding words — that self-attention step is the real bridge to modern LLMs like Phi-3.5-mini. Running everything locally in the browser (with graceful fallback from WebGPU to WebAssembly) also reframed the generative-vs-specialized choice as an architecture decision rather than a "which tool is better" question. This directly changed how I plan to approach the sentiment analysis in my capstone: a contextual representation is now the defensible choice, and the PII detection tasks made the Data Privacy Act obligations feel concrete rather than abstract.',
+  },
 ];
 
 export function getActivitiesByPeriod(period: Activity['period']): Activity[] {

@@ -1,4 +1,19 @@
 import './style.css';
+import { getActivitiesByPeriod, type Activity } from './data';
+import { cardHtml } from './card';
+
+function initCourseSections() {
+  const mounts = document.querySelectorAll<HTMLElement>('.course-mount');
+  mounts.forEach((mount) => {
+    const period = (mount.getAttribute('data-period') || '') as Activity['period'];
+    const list = getActivitiesByPeriod(period);
+    if (!list.length) return;
+    mount.innerHTML = `<div class="course-grid">${list.map(cardHtml).join('')}</div>`;
+    // Cards carry the .reveal class (hidden until animated). The reveal
+    // observer already ran over the original DOM, so reveal these directly.
+    mount.querySelectorAll('.reveal').forEach((el) => el.classList.add('active'));
+  });
+}
 
 function initNavbar() {
   const navbar = document.getElementById('navbar');
@@ -255,4 +270,5 @@ document.addEventListener('DOMContentLoaded', () => {
   initSmoothScroll();
   initTypeEffect();
   initTiltCards();
+  initCourseSections();
 });
