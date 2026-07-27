@@ -28,6 +28,20 @@ export const activities: Activity[] = [
     reflection:
       'Coming into this exercise, my understanding of text handling was purely operational — strip punctuation, lowercase, vectorize, then hand it to a classifier. This activity turned that procedure into actual reasoning about *why* each step exists and what it costs. Three ideas stuck with me. First, preprocessing is never neutral: aggressive lowercasing would have erased the German capitalization that the language detector relied on, and removing stop-words would kill the negation in "not good" that carries the entire sentiment. Every cleaning decision is a trade-off tied to the task. Second, TF-IDF and embeddings are complementary, not competing — TF-IDF is transparent and auditable but treats "laptop" and "notebook computer" as unrelated, while embeddings place similar meanings near each other as measurable geometry. Third, and most eye-opening, was the limitation of static embeddings: one fixed vector per word collapses the "bank" of a river and the "bank" that holds money into a single averaged point. Contextual models fix this by computing a fresh vector for every occurrence based on its surrounding words — that self-attention step is the real bridge to modern LLMs like Phi-3.5-mini. Running everything locally in the browser (with graceful fallback from WebGPU to WebAssembly) also reframed the generative-vs-specialized choice as an architecture decision rather than a "which tool is better" question. This directly changed how I plan to approach the sentiment analysis in my capstone: a contextual representation is now the defensible choice, and the PII detection tasks made the Data Privacy Act obligations feel concrete rather than abstract.',
   },
+  {
+    id: 2,
+    title: 'PT-P1: Text Classification of Customer Feedback Using a Neural Network',
+    type: 'activity',
+    description:
+      'No-code neural network exercise on the Machine Learning for Kids platform: trained a text classifier to sort food-delivery customer feedback into Positive_Praise, Negative_Complaint, and Urgent_Support. After refining an initial 30-example dataset to remove class overlap, the model correctly classified all 10 unseen test phrases (100% accuracy, 94.9% average confidence). Sarcastic and out-of-vocabulary phrases were also tested to probe the model\'s failure modes.',
+    date: '2026-07-27',
+    status: 'submitted',
+    period: 'prelim',
+    files: [
+      '/assets/Sagarino_Exercise_PT-P1.pdf',
+      '/assets/Sagarino_Exercise_PT-P1.xlsx',
+    ],
+  },
 ];
 
 export function getActivitiesByPeriod(period: Activity['period']): Activity[] {

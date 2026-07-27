@@ -20,13 +20,22 @@ function fileMeta(path: string): { name: string; ext: string; label: string } {
   const name = path.split('/').pop() || path;
   const ext = (name.split('.').pop() || '').toLowerCase();
   const label =
-    ext === 'pdf' ? 'PDF' : ext === 'docx' || ext === 'doc' ? 'Word' : ext.toUpperCase();
+    ext === 'pdf'
+      ? 'PDF'
+      : ext === 'docx' || ext === 'doc'
+      ? 'Word'
+      : ext === 'xlsx' || ext === 'xls'
+      ? 'Excel'
+      : ext.toUpperCase();
   return { name, ext, label };
 }
 
 function fileIcon(ext: string): string {
   if (ext === 'pdf') {
     return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>`;
+  }
+  if (ext === 'xlsx' || ext === 'xls') {
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><path d="M8 13h8M8 17h8M10 13v4"/></svg>`;
   }
   return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>`;
 }
