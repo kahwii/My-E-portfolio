@@ -44,6 +44,23 @@ export const activities: Activity[] = [
     reflection:
       'Honestly, before this exercise I thought you had to program every rule for the computer to understand text, like telling it "if the message says refund, it\'s a complaint." But building the model showed me it doesn\'t work that way. The neural network just learned from the examples I gave it and was able to classify new messages I never trained it on. That part was actually cool to see.\nWhat stuck with me the most was how much the data mattered. When I only had a few examples and they overlapped, the model gave a weak 44% guess. After I added more examples and made them clearer, the same type of phrase went up to over 90%. It made me realize the model is only as good as the data you feed it. The tricky part was testing the sarcastic and random questions — the sarcastic ones still got classified right but with lower confidence, and the billing questions dropped to like 4-5% because I never gave it a class for those. It made sense once I thought about it.\nOverall I learned a lot about how these models actually learn and why data quality is such a big deal. If I did it again I\'d probably add more classes and some sarcastic examples from the start so it could handle the harder cases better.',
   },
+  {
+    id: 3,
+    title: 'PT-P2: Neural Network Training and Testing (Hyperparameters)',
+    type: 'assignment',
+    description:
+      'Code-based follow-up to PT-P1, re-implementing the same three-class text classifier as an explicit TensorFlow/Keras pipeline (Embedding → GlobalAveragePooling1D → Dense ReLU → Dropout → softmax). Ran seven controlled experiments varying the three hyperparameter pillars — architecture, optimization, and regularization — across two datasets, diagnosing each run from its loss curve. Every training behavior was reproduced on demand: underfitting pinned at the ln(3) chance-level loss, severe overfitting (validation loss 15.24), the partial corrective effect of dropout, and early stopping. No configuration achieved a good fit on the 15-row sample set, but the very first run on a 210-row dataset converged cleanly (validation loss 0.066, 96.77% accuracy), showing dataset volume — not tuning — was the binding constraint.',
+    date: '2026-08-08',
+    status: 'submitted',
+    period: 'prelim',
+    files: [
+      '/assets/Sagarino_Emmanuel_IEEE_Repor.pdf',
+      '/assets/Sagarino_Emmanuel_Neural_Network_Training_Testing.ipynb',
+      '/assets/Sagarino_Emmanuel_FFBP_Training_Log_Template.xlsx',
+    ],
+    reflection:
+      'This one was a big jump from PT-P1. In the first exercise the no-code tool just handed me a working model and a 100% score, and I never saw what was going on underneath. Doing it in Keras this time forced me to actually set the learning rate, the number of epochs, the hidden units, and the dropout myself, and that\'s where it got real. I could break the model on purpose and watch it happen in the loss curve.\nThe part that clicked the most was reading the loss curves instead of just trusting the accuracy. When I used a tiny learning rate the two curves just sat flat at the chance level and nothing learned — that was underfitting. When I cranked up the capacity with no dropout the training loss dropped to zero while the validation loss shot up to like 15 — that was overfitting, basically the model memorizing. Adding dropout pulled that back down a lot but didn\'t fully fix it, which showed me regularization treats the symptom, not the cause.\nThe biggest lesson was about the data again. No matter how I tuned the 15-row set, I could never get a clean fit, because a 70/15/15 split only leaves 2 validation samples — so one run showed a fake 100% accuracy while the loss proved it learned nothing. The moment I switched to the 210-row dataset it converged on the first try at 96.77%. So even though my number didn\'t beat PT-P1\'s 100% on paper, I understand now that 96.77% on 31 unseen samples means way more than 100% on 10 hand-picked ones. The real win was finally seeing why a model works or fails, not just the score.',
+  },
 ];
 
 export function getActivitiesByPeriod(period: Activity['period']): Activity[] {
