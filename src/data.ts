@@ -61,6 +61,22 @@ export const activities: Activity[] = [
     reflection:
       'This one was a big jump from PT-P1. In the first exercise the no-code tool just handed me a working model and a 100% score, and I never saw what was going on underneath. Doing it in Keras this time forced me to actually set the learning rate, the number of epochs, the hidden units, and the dropout myself, and that\'s where it got real. I could break the model on purpose and watch it happen in the loss curve.\nThe part that clicked the most was reading the loss curves instead of just trusting the accuracy. When I used a tiny learning rate the two curves just sat flat at the chance level and nothing learned — that was underfitting. When I cranked up the capacity with no dropout the training loss dropped to zero while the validation loss shot up to like 15 — that was overfitting, basically the model memorizing. Adding dropout pulled that back down a lot but didn\'t fully fix it, which showed me regularization treats the symptom, not the cause.\nThe biggest lesson was about the data again. No matter how I tuned the 15-row set, I could never get a clean fit, because a 70/15/15 split only leaves 2 validation samples — so one run showed a fake 100% accuracy while the loss proved it learned nothing. The moment I switched to the 210-row dataset it converged on the first try at 96.77%. So even though my number didn\'t beat PT-P1\'s 100% on paper, I understand now that 96.77% on 31 unseen samples means way more than 100% on 10 hand-picked ones. The real win was finally seeing why a model works or fails, not just the score.',
   },
+  {
+    id: 4,
+    title: 'PT-M1: Retrieval-Augmented Generation Chatbot for Waste Segregation (SDG 11 & 12)',
+    type: 'project',
+    description:
+      'Built and adversarially evaluated a RAG chatbot for Philippine household waste segregation, aligned with SDG 11 and SDG 12. A 3-document corpus was split into 38 chunks, embedded with all-MiniLM-L6-v2, indexed in ChromaDB, and queried through openai/gpt-oss-20b under a strict grounding contract. Across four in-domain and one out-of-domain query it produced zero factual hallucinations. Two findings complicate the usual story: the grounding contract caused a false refusal on an in-domain question whose answer was in the corpus but missing from the top-3 retrieval (refusal has a real recall cost), and removing the fallback rule at temperature 1.0 did not induce hallucination — it produced four different refusal wordings. The instruction\'s real benefit was output determinism, not hallucination suppression. API key handled via getpass so it never touches the saved notebook.',
+    date: '2026-09-07',
+    status: 'submitted',
+    period: 'midterm',
+    files: [
+      '/assets/Sagarino_Emmanuel_PT-M1_RAG.pdf',
+      '/assets/Sagarino_Emmanuel_PT_M1_RAG.ipynb',
+    ],
+    reflection:
+      'This exercise changed how I think about hallucination. Going in, I assumed the whole point of the grounding rule was to stop the model from making things up, and that removing it plus cranking the temperature to 1.0 would obviously make it hallucinate. But it didn\'t — even ungrounded, the model still refused to answer the out-of-domain question. What actually changed was the wording: with the rule I got one exact refusal sentence every time, and without it I got four completely different refusals. That was the real lesson — the rule buys you a predictable, catchable output, not protection from lies. In a real system that matters, because you can string-match one canonical refusal and route it to a person, but you can\'t catch random paraphrases.\nThe part that surprised me most was the false refusal. The chatbot refused to answer a question that WAS in my documents, just because the right chunk didn\'t make it into the top 3 retrieved. It made me realize the retrieval side was actually my weakest link, not the prompt — my 500-character chunks split the category list across three pieces and none of them scored high enough. So "refusal is not free," a safe-looking no-answer was actually hiding information I already had. If I did it again I\'d raise k, use bigger chunks, and add a reranker so the model only refuses when the corpus is truly silent.',
+  },
 ];
 
 export function getActivitiesByPeriod(period: Activity['period']): Activity[] {
