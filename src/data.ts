@@ -77,6 +77,18 @@ export const activities: Activity[] = [
     reflection:
       'This exercise changed how I think about hallucination. Going in, I assumed the whole point of the grounding rule was to stop the model from making things up, and that removing it plus cranking the temperature to 1.0 would obviously make it hallucinate. But it didn\'t — even ungrounded, the model still refused to answer the out-of-domain question. What actually changed was the wording: with the rule I got one exact refusal sentence every time, and without it I got four completely different refusals. That was the real lesson — the rule buys you a predictable, catchable output, not protection from lies. In a real system that matters, because you can string-match one canonical refusal and route it to a person, but you can\'t catch random paraphrases.\nThe part that surprised me most was the false refusal. The chatbot refused to answer a question that WAS in my documents, just because the right chunk didn\'t make it into the top 3 retrieved. It made me realize the retrieval side was actually my weakest link, not the prompt — my 500-character chunks split the category list across three pieces and none of them scored high enough. So "refusal is not free," a safe-looking no-answer was actually hiding information I already had. If I did it again I\'d raise k, use bigger chunks, and add a reranker so the model only refuses when the corpus is truly silent.',
   },
+  {
+    id: 5,
+    title: 'Prelim Examination',
+    type: 'quiz',
+    description:
+      'Preliminary period examination for ITC-C508 covering the foundational topics of the term — NLP concepts, neural network text classification, and model training and testing. Score: 8/30.',
+    date: '2026-08-29',
+    status: 'submitted',
+    period: 'prelim',
+    reflection:
+      'I actually enjoyed taking this exam, and I made sure to answer everything in my own words instead of just memorizing and copying definitions. That part felt good because it showed me which topics I really understood versus the ones I only thought I knew. Looking at my 8/30, I can see the gap was not that I did not study, but that my answers were too short and surface-level — I stated the idea but did not explain it or back it up with examples. For the next exam my main goal is to give more detailed and complete answers: define the concept, explain why it matters, and connect it to what we actually did in the activities like the text classifier and the loss-curve experiments. I would rather fully explain fewer points than rush through everything with one-liners. This result is a clear signal of where to focus, and I am treating it as a starting point to improve on, not a final grade.',
+  },
 ];
 
 export function getActivitiesByPeriod(period: Activity['period']): Activity[] {
