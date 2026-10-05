@@ -89,6 +89,22 @@ export const activities: Activity[] = [
     reflection:
       'I actually enjoyed taking this exam, and I made sure to answer everything in my own words instead of just memorizing and copying definitions. That part felt good because it showed me which topics I really understood versus the ones I only thought I knew. Looking at my 8/30, I can see the gap was not that I did not study, but that my answers were too short and surface-level — I stated the idea but did not explain it or back it up with examples. For the next exam my main goal is to give more detailed and complete answers: define the concept, explain why it matters, and connect it to what we actually did in the activities like the text classifier and the loss-curve experiments. I would rather fully explain fewer points than rush through everything with one-liners. This result is a clear signal of where to focus, and I am treating it as a starting point to improve on, not a final grade.',
   },
+  {
+    id: 6,
+    title: 'WW-M2 Extension: Updated Research Proposal (Group — Purple R)',
+    type: 'project',
+    description:
+      'Updated group proposal (Purple R, 3 members) for the Final Project. Proposes a Retrieval-Augmented Generation chatbot that routes a described defective Philippine purchase to the single governing statute — RA 7394 (Consumer Act), RA 8792 (E-Commerce Act), RA 10642 (Lemon Law), RA 11967 (Internet Transactions Act), or none — then reads the remedy, deadline, and required first step out of the retrieved provision. Aligned with SDG 12 (Responsible Consumption and Production). The core research question is whether retrieval grounding improves statutory-routing accuracy over a non-RAG baseline on the same model (gpt-oss-20b via Groq), scored as a five-way classification against a reconciled answer key, with a 40-item evaluation set built around adversarial near-miss cases. Submitted via Teams on Sep 29, 2026.',
+    date: '2026-09-29',
+    status: 'submitted',
+    period: 'midterm',
+    files: [
+      '/assets/PurpleR_Revised_IEEE.docx',
+      '/assets/PurpleR_Revised.pptx',
+    ],
+    reflection:
+      'This was our group\'s updated proposal, and the biggest change from our first version was how much narrower and sharper the problem got. At first we only asked what remedies the Consumer Act gives an online buyer, which sounded fine until we actually surveyed the laws and realized a single defective purchase can fall under four different statutes with different triggers, deadlines, and forums. That was the real insight — the problem is not that the information is hidden, it is that it is spread across laws a normal buyer cannot tell apart, and picking the wrong one can forfeit a valid claim on a technicality. That is exactly the kind of problem RAG is built for, because every answer already exists word-for-word in public statutes and can be cited back.\nWorking as a group taught me a lot about scoping. We learned to lock the output down to one label from a closed set so the whole study has a single measurable question instead of several bundled together, and we set up the ground truth so two of us map each question independently and the third reconciles. My takeaway is that widening our research of the legal landscape did not widen the project — it actually tightened it, and that is what made the proposal defensible.',
+  },
 ];
 
 export function getActivitiesByPeriod(period: Activity['period']): Activity[] {
