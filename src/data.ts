@@ -117,6 +117,24 @@ export const activities: Activity[] = [
     reflection:
       'This midterm was a wake-up call for me. Getting a 0 on Test I (the quiz) stung, but being honest with myself, it showed me I went in underprepared on that part and relied too much on recognition instead of really knowing the material. Test II went better at 8, which told me I understand the concepts more when I can explain them in my own words rather than pick an exact answer under pressure. Putting the two together, my pattern is clear: I know the ideas but I lose points when the format is strict or when I have not reviewed the specific details.\nFor the finals my plan is to fix the preparation side, not just the test-taking side — actually drilling the quiz-type details ahead of time, reviewing each topic right after the lecture instead of cramming, and connecting every concept back to the hands-on activities like the RAG chatbot and the training experiments so it sticks. I am treating these scores as feedback on how I study, and the goal is a steadier result across both the quiz and the exam next time.',
   },
+  {
+    id: 8,
+    title: 'PT-F1: Optimizing Chunk Size and Overlap — Initial Preps',
+    type: 'activity',
+    description:
+      'Finals preparation stage for the consumer-remedy RAG pipeline: setting up a controlled comparison of chunk size and overlap. A 17-page corpus of four Philippine consumer statutes (RA 7394, 8792, 10642, 11967) plus DTI guidance was indexed with all-MiniLM-L6-v2 into a FAISS IndexFlatIP store (85 chunks at the 1000/200 baseline). Three graded test questions (easy/average/difficult) plus a guardrail were authored with verbatim evidence, the flan-t5-base model was swapped for openai/gpt-oss-20b via Groq, and a hardened grounding prompt was developed across six documented iterations. The key finding: Q3 is a retrieval failure, not a generation failure — at k=3 all top results come from one page, so the motorcycle-exclusion passage sits at rank 4, one place below the cut. That measured gap is the specific reason the upcoming chunk-size experiment is expected to change the Q3 outcome. Everything except chunk size and overlap is held fixed so any change in Precision@3/Recall@3/MRR@3 is attributable to chunking alone.',
+    date: '2026-10-24',
+    status: 'submitted',
+    period: 'finals',
+    files: [
+      '/assets/Sagarino_PT-F1_Submission.pdf',
+      '/assets/Sagarino_PT-F1_Corpus.pdf',
+      '/assets/Sagarino_PT_F1.ipynb',
+      '/assets/Sagarino_PT-F1_Corpus_chunks_1000_200.xlsx',
+    ],
+    reflection:
+      'The biggest thing I learned here is the difference between a retrieval failure and a generation failure, and why you cannot fix one by patching the other. My hardest question (Q3) kept coming out wrong even after I tightened the prompt again and again, and at first I assumed the model was just being careless. But when I actually traced the retrieval, I saw the passage that proves the Lemon Law does NOT cover motorcycles was never even handed to the model — at my 1000-character chunk size all three retrieved chunks came from the same page, and the exclusion sat at rank 4, one spot below the cut. No amount of prompt engineering can fix that, because the model cannot reason from evidence it never received.\nThe other lesson was that my checker could lie to me. One version passed Q3 as "grounded" just because it cited a page that happened to be retrieved, even though the answer was wrong. That pushed me to make the check verify an actual verbatim quote against the retrieved text, and to report coverage as a fraction instead of a yes/no, so a confident answer built on only 1 of 3 required passages shows up as UNSAFE instead of sneaking through. Setting all of this up as a controlled experiment — holding everything fixed except chunk size and overlap — is what makes the next stage meaningful, because any change in the metrics will be caused by the chunking and nothing else. Finding the problem during prep, with a measured reason to expect resizing to help, felt like the whole point of this stage.',
+  },
 ];
 
 export function getActivitiesByPeriod(period: Activity['period']): Activity[] {
