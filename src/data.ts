@@ -135,6 +135,25 @@ export const activities: Activity[] = [
     reflection:
       'The biggest thing I learned here is the difference between a retrieval failure and a generation failure, and why you cannot fix one by patching the other. My hardest question (Q3) kept coming out wrong even after I tightened the prompt again and again, and at first I assumed the model was just being careless. But when I actually traced the retrieval, I saw the passage that proves the Lemon Law does NOT cover motorcycles was never even handed to the model — at my 1000-character chunk size all three retrieved chunks came from the same page, and the exclusion sat at rank 4, one spot below the cut. No amount of prompt engineering can fix that, because the model cannot reason from evidence it never received.\nThe other lesson was that my checker could lie to me. One version passed Q3 as "grounded" just because it cited a page that happened to be retrieved, even though the answer was wrong. That pushed me to make the check verify an actual verbatim quote against the retrieved text, and to report coverage as a fraction instead of a yes/no, so a confident answer built on only 1 of 3 required passages shows up as UNSAFE instead of sneaking through. Setting all of this up as a controlled experiment — holding everything fixed except chunk size and overlap — is what makes the next stage meaningful, because any change in the metrics will be caused by the chunking and nothing else. Finding the problem during prep, with a measured reason to expect resizing to help, felt like the whole point of this stage.',
   },
+  {
+    id: 9,
+    title: 'PT-F2: Chunk Size Dominates Overlap — Controlled Retrieval Experiment',
+    type: 'project',
+    description:
+      'The full chunking experiment that follows PT-F1. Twelve configurations (chunk sizes 300–2000 chars × overlaps of 0/10/20%) were compared on the 17-page Philippine consumer-law corpus with a fixed FAISS retriever, fixed embeddings, and nine questions carrying nineteen pre-registered evidence units. Headline finding: chunk size — not overlap — governs retrieval quality. Mean Precision@3 rises from 0.154 (≤500 chars) to 0.296 (≥1000), and Recall@3 from 0.356 to 0.597. The effect is categorical on hard questions — every config at 800 chars or below scores exactly 0.000 on the difficult band, because a three-passage answer cannot fit in three fragments. Zero-overlap settings were eliminated first for cutting evidence at boundaries. The recommended config is 1500/300 (C11): best MRR@3 of 0.667, equal-best Recall@3 of 0.611, using fewer chunks (60) and less storage than the 1000/200 baseline. It also confirmed PT-F1\'s prediction — the motorcycle-exclusion passage, previously stuck at rank 4, enters the top-3 at 1500 chars.',
+    date: '2026-10-30',
+    status: 'submitted',
+    period: 'finals',
+    files: [
+      '/assets/Sagarino_PT-F2_Report.pdf',
+      '/assets/Sagarino_PT_F2_Chunking_Experiment.ipynb',
+      '/assets/Sagarino_PT-F2_Experiment_Log.xlsx',
+      '/assets/Sagarino_PT-F2_TableC_retrieval_log.csv',
+      '/assets/Sagarino_PT-F1_Corpus-29c8895b.pdf',
+    ],
+    reflection:
+      'This part was satisfying because it turned the hunch from PT-F1 into an actual measured answer. In the prep stage I had predicted that resizing my chunks might pull the motorcycle-exclusion passage into the top 3, and running all twelve configurations proved it — at 1500 characters the exclusion finally enters the retrieved set and the difficult-band recall jumps. Seeing a prediction I made beforehand get confirmed by the numbers, instead of explaining a result after the fact, is the first time a project felt like real science to me.\nThe clearest lesson was that chunk size matters far more than overlap, and the reason is in the text itself: these are statutes where a rule, its condition, and its exception are written as consecutive sentences, so a small window literally cuts the answer in half. Overlap mostly earned its keep by stopping evidence from being destroyed at boundaries, not by improving ranking. I also learned to be careful about what a metric is really telling me — Precision@3 could never go above 0.333 here just because most questions only need one chunk, so a low number was not bad performance, it was the structure of the test. And picking 1500/300 over the higher-precision 2000/400 taught me to weigh the rank of the first relevant chunk, since that is what actually survives a limited context budget in a real RAG system. The nicest surprise was that the best configuration was also the cheapest — fewer chunks and smaller index — so I did not have to trade quality for cost.',
+  },
 ];
 
 export function getActivitiesByPeriod(period: Activity['period']): Activity[] {
