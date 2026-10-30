@@ -154,6 +154,24 @@ export const activities: Activity[] = [
     reflection:
       'This part was satisfying because it turned the hunch from PT-F1 into an actual measured answer. In the prep stage I had predicted that resizing my chunks might pull the motorcycle-exclusion passage into the top 3, and running all twelve configurations proved it — at 1500 characters the exclusion finally enters the retrieved set and the difficult-band recall jumps. Seeing a prediction I made beforehand get confirmed by the numbers, instead of explaining a result after the fact, is the first time a project felt like real science to me.\nThe clearest lesson was that chunk size matters far more than overlap, and the reason is in the text itself: these are statutes where a rule, its condition, and its exception are written as consecutive sentences, so a small window literally cuts the answer in half. Overlap mostly earned its keep by stopping evidence from being destroyed at boundaries, not by improving ranking. I also learned to be careful about what a metric is really telling me — Precision@3 could never go above 0.333 here just because most questions only need one chunk, so a low number was not bad performance, it was the structure of the test. And picking 1500/300 over the higher-precision 2000/400 taught me to weigh the rank of the first relevant chunk, since that is what actually survives a limited context budget in a real RAG system. The nicest surprise was that the best configuration was also the cheapest — fewer chunks and smaller index — so I did not have to trade quality for cost.',
   },
+  {
+    id: 10,
+    title: 'WW1 & WW2: Hardware Decides the Configuration — CPU vs GPU Benchmark (Group — Purple R)',
+    type: 'project',
+    description:
+      'Group optimization and GPU-testing study (Purple R) benchmarking the consumer-law RAG chatbot across two Colab runtimes — a shared CPU and a Tesla T4 — with every variable but hardware held fixed. Five indexing configurations over 73,652 characters of Philippine consumer law were measured with Qwen2.5-1.5B-Instruct generation. Retrieval metrics are bit-identical across devices; only generation differs. The GPU is 51.4× faster end to end, but not uniformly: the generation speedup grows with chunk size (26.2× at 400 chars → 81.8× at 1200), because prompt-prefill is sequential on the CPU and parallel on the GPU. The practical punchline — the best-quality config (1200/150, Run C) takes 304.90 s/answer on CPU but only 6.31 s on GPU: the same parameters are unusable on one device and comfortable on the other, so parameter selection and hardware selection are a single joint decision. Recommended operating point: Run C on a Tesla T4.',
+    date: '2026-10-30',
+    status: 'submitted',
+    period: 'finals',
+    files: [
+      '/assets/PurpleR_RAG_Experiment_Report.pdf',
+      '/assets/PurpleR_RAG_Experiment_Notebook_GPU.ipynb',
+      '/assets/PurpleR_RAG_Experiment_Results.xlsx',
+      '/assets/PurpleR_RAG_Experiment_Data.zip',
+    ],
+    reflection:
+      'The headline lesson for me was that you cannot pick your parameters and your hardware separately — they are one decision. My best configuration took over five minutes per answer on the CPU and about six seconds on the GPU, so the exact same settings were useless on one device and perfectly fine on the other. The ranking of configurations by speed even flipped between devices, which means if I had tuned everything on a laptop CPU and then deployed on a GPU, I would have optimized against the wrong cost model entirely.\nDigging into why the speedup was not a single number taught me the most. Retrieval barely sped up (about 4.5×) because the similarity search runs on the host CPU either way, while generation sped up 51× and dominated the total because it is basically all of the response time. The gain grew with chunk size because longer prompts mean a longer prefill pass, which the CPU reads almost linearly but the GPU nearly absorbs. I also hit a subtle thing I did not expect: greedy decoding was supposed to be deterministic, but the CPU and GPU gave slightly different answers because the arithmetic is not bitwise identical, so reproducibility turned out to be a property of the hardware too. As the group member who built and ran the experiment, being careful about timers — synchronizing CUDA before stopping the clock, separating indexing from retrieval from generation — was what made the numbers trustworthy, and that discipline is the part I am most proud of.',
+  },
 ];
 
 export function getActivitiesByPeriod(period: Activity['period']): Activity[] {
