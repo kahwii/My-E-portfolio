@@ -105,6 +105,18 @@ export const activities: Activity[] = [
     reflection:
       'This was our group\'s updated proposal, and the biggest change from our first version was how much narrower and sharper the problem got. At first we only asked what remedies the Consumer Act gives an online buyer, which sounded fine until we actually surveyed the laws and realized a single defective purchase can fall under four different statutes with different triggers, deadlines, and forums. That was the real insight — the problem is not that the information is hidden, it is that it is spread across laws a normal buyer cannot tell apart, and picking the wrong one can forfeit a valid claim on a technicality. That is exactly the kind of problem RAG is built for, because every answer already exists word-for-word in public statutes and can be cited back.\nWorking as a group taught me a lot about scoping. We learned to lock the output down to one label from a closed set so the whole study has a single measurable question instead of several bundled together, and we set up the ground truth so two of us map each question independently and the third reconciles. My takeaway is that widening our research of the legal landscape did not widen the project — it actually tightened it, and that is what made the proposal defensible.',
   },
+  {
+    id: 7,
+    title: 'Midterm Examination (Test I: Quiz & Test II: Exam)',
+    type: 'quiz',
+    description:
+      'Combined midterm assessment for ITC-C508, covering the Midterm topics including Retrieval-Augmented Generation, vector embeddings, and prompt grounding. Scores — Test I (Quiz): 0, Test II (Exam): 8.',
+    date: '2026-10-17',
+    status: 'submitted',
+    period: 'midterm',
+    reflection:
+      'This midterm was a wake-up call for me. Getting a 0 on Test I (the quiz) stung, but being honest with myself, it showed me I went in underprepared on that part and relied too much on recognition instead of really knowing the material. Test II went better at 8, which told me I understand the concepts more when I can explain them in my own words rather than pick an exact answer under pressure. Putting the two together, my pattern is clear: I know the ideas but I lose points when the format is strict or when I have not reviewed the specific details.\nFor the finals my plan is to fix the preparation side, not just the test-taking side — actually drilling the quiz-type details ahead of time, reviewing each topic right after the lecture instead of cramming, and connecting every concept back to the hands-on activities like the RAG chatbot and the training experiments so it sticks. I am treating these scores as feedback on how I study, and the goal is a steadier result across both the quiz and the exam next time.',
+  },
 ];
 
 export function getActivitiesByPeriod(period: Activity['period']): Activity[] {
