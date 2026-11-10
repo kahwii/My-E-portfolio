@@ -172,6 +172,28 @@ export const activities: Activity[] = [
     reflection:
       'The headline lesson for me was that you cannot pick your parameters and your hardware separately — they are one decision. My best configuration took over five minutes per answer on the CPU and about six seconds on the GPU, so the exact same settings were useless on one device and perfectly fine on the other. The ranking of configurations by speed even flipped between devices, which means if I had tuned everything on a laptop CPU and then deployed on a GPU, I would have optimized against the wrong cost model entirely.\nDigging into why the speedup was not a single number taught me the most. Retrieval barely sped up (about 4.5×) because the similarity search runs on the host CPU either way, while generation sped up 51× and dominated the total because it is basically all of the response time. The gain grew with chunk size because longer prompts mean a longer prefill pass, which the CPU reads almost linearly but the GPU nearly absorbs. I also hit a subtle thing I did not expect: greedy decoding was supposed to be deterministic, but the CPU and GPU gave slightly different answers because the arithmetic is not bitwise identical, so reproducibility turned out to be a property of the hardware too. As the group member who built and ran the experiment, being careful about timers — synchronizing CUDA before stopping the clock, separating indexing from retrieval from generation — was what made the numbers trustworthy, and that discipline is the part I am most proud of.',
   },
+  {
+    id: 11,
+    title: 'P-F1: Retrieval Is the Ceiling — Final RAG Chatbot for Philippine Consumer Law (Group — Purple R)',
+    type: 'project',
+    description:
+      'The complete group final project (Purple R) — building and evaluating a retrieval-augmented chatbot over 73,652 characters of Philippine consumer-remedy law (RA 7394, 8792, 10642, 11967 + DTI guidance). Evaluated on twelve questions (nine answerable, three not) with twenty-one pre-registered verbatim evidence anchors. Five chunking configurations were compared — 1200/150 (Run C) won with Recall@3 of 0.593 vs 0.333 for the 800-char baseline, using the fewest chunks. Three prompt versions were measured: v2 (adding prohibitions) was worse than v1, and v3 (a larger Qwen2.5-3B model with worked examples instead of prohibitions) eliminated wrong refusals and raised mean answer quality from 0.407 to 0.537. The central finding: answer quality tracks retrieval in lockstep — Recall@3 falls from 1.000 on easy questions to 0.111 on difficult ones, and quality follows (1.000 → 0.222). On the difficult failures the decisive passage was never retrieved, so no prompt could rescue them. Dense similarity search over a single embedding model — not the language model — is the binding constraint. Submission bundle includes the IEEE report, final notebook, chunking + experiment logs, chatbot evaluation, member responsibility matrix, integrity/AI-usage statement, and the full data archive.',
+    date: '2026-11-10',
+    status: 'submitted',
+    period: 'finals',
+    files: [
+      '/assets/PurpleR_IEEE_Report.docx',
+      '/assets/PurpleR_FinalProject_RAG.ipynb',
+      '/assets/PurpleR_Chunking_Experiment.xlsx',
+      '/assets/PurpleR_Experiment_Logs.xlsx',
+      '/assets/PurpleR_Chatbot_Evaluation.csv',
+      '/assets/PurpleR_Member_Responsibility_Matrix.docx',
+      '/assets/PurpleR_Integrity_and_AI_Usage_Statement.pdf',
+      '/assets/PurpleR_FinalProject_Data.zip',
+    ],
+    reflection:
+      'This was the project everything else was building toward, and the biggest realization for me was in the title we gave it: retrieval is the ceiling. For weeks I kept trying to fix wrong answers by rewriting the prompt, and this final round proved that past a certain point the prompt is not the problem at all. When a difficult question failed, it was almost always because the one passage that settles it — like the clause excluding motorcycles from the Lemon Law — was never even retrieved, so the model was reasoning correctly over evidence that simply did not contain the answer. You cannot prompt your way out of missing evidence.\nThe prompt experiment humbled me in a useful way too. My instinct was that adding more rules and prohibitions would make the chatbot safer, but version 2 actually got worse — it just gave the model a clean excuse to refuse, even on a question where it had already retrieved and quoted the right law. Switching to a bigger model with worked examples instead of a wall of "do not" rules is what finally removed the wrong refusals. I also learned to distrust my own scorer: it marked a correct answer wrong because it said "between individuals" instead of the exact phrase "consumer-to-consumer," which taught me that an evaluation harness can be as buggy as the system it is grading. Pulling the whole term together — the consumer-law routing idea, the chunking experiments, the CPU/GPU benchmark — into one honest paper that reports its failures as clearly as its wins is the work I am proudest of this semester.',
+  },
 ];
 
 export function getActivitiesByPeriod(period: Activity['period']): Activity[] {
