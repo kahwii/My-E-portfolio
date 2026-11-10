@@ -189,6 +189,8 @@ export const activities: Activity[] = [
       '/assets/PurpleR_Chatbot_Evaluation.csv',
       '/assets/PurpleR_Member_Responsibility_Matrix.docx',
       '/assets/PurpleR_Integrity_and_AI_Usage_Statement.pdf',
+      '/assets/PurpleR_Run_Notes.md',
+      '/assets/PurpleR_Screenshots.zip',
       '/assets/PurpleR_FinalProject_Data.zip',
     ],
     reflection:
